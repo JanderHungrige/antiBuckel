@@ -56,7 +56,23 @@ Run this command in your terminal:
 ```bash
 brew install cocoapods
 ```
+```bash
+brew install cocoapods
+```
 Then run `flutter run` again.
+
+**"No valid code signing certificates" Error (iOS)**
+This means Xcode doesn't have your Apple ID permissions to install apps on your phone.
+1.  Run the helper script:
+    ```bash
+    ./scripts/open_xcode_signing.sh
+    ```
+2.  In Xcode, select the **Runner** project (blue icon, top left).
+3.  Choose the **Runner** TARGET.
+4.  Go to **Signing & Capabilities** -> **Team** -> **Add an Account**.
+5.  Login with your Apple ID.
+6.  **Repeat** this for the `BuckelWidget` target if you created it.
+7.  If deploying to a physical phone, you may need to go to **Settings > General > VPN & Device Management** on your iPhone and "Trust" your Apple ID.
 
 ## 3. Verification Steps
 
