@@ -7,6 +7,7 @@ import 'sensor_service.dart';
 import 'notification_service.dart';
 import '../repositories/settings_repository.dart';
 import '../../domain/logic/tilt_logic.dart';
+import '../../domain/entities/posture_state.dart';
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();

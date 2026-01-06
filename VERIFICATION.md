@@ -49,6 +49,15 @@ flutter run
 - The app will automatically open on the Simulator/Phone.
 - Your terminal will show logs. **Keep the terminal open** to see debug output.
 
+### Troubleshooting
+**"CocoaPods not installed" Error**
+If you see an error about CocoaPods on iOS, it means your Mac is missing the dependency manager for Xcode.
+Run this command in your terminal:
+```bash
+brew install cocoapods
+```
+Then run `flutter run` again.
+
 ## 3. Verification Steps
 
 ### A. Angle Detection
