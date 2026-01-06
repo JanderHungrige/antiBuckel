@@ -3,18 +3,51 @@
 The **AntiBuckel** app has been implemented with a modular architecture suitable for iOS and Android.
 
 > [!IMPORTANT]
-> The local environment lacks Xcode and Android SDK. You must run this project on a machine with full mobile development setup.
+> The local environment lacks Xcode and Android SDK. You must run this project on a machine with full mobile development setup (e.g., your personal Mac).
 
 ## 1. Project Structure
 - `lib/data/services`: Handles Hardware (Sensors, Background, Notifications).
 - `lib/domain/logic`: Pure business logic (Tilt detection, Alarm intensity).
 - `lib/presentation`: UI (Home Dashboard, Settings).
 
-## 2. How to Run
-1.  Ensure you have Xcode (Mac) or Android Studio installed.
-2.  Run `flutter pub get` to install dependencies.
-3.  Connect a device or launch a simulator.
-4.  Run `flutter run`.
+## 2. How to Run (Detailed)
+
+You do **not** need to open Xcode or Android Studio explicitly to run the app, but they must be installed as they provide the underlying tools and simulators.
+
+### Roles of the Tools
+- **Flutter**: The main tool you interact with. It compiles your Dart code and tells Xcode/Android Studio what to do.
+- **Xcode / Android Studio**: These are the "Engines". Flutter uses them in the background to build the native iOS/Android app.
+- **Simulator / Emulator**: These are the virtual phones that will pop up on your screen when you run the app.
+
+### Step-by-Step Guide
+
+**1. Open your Terminal (or VS Code)**
+Navigate to the project folder where you cloned the code.
+```bash
+cd antiBuckel
+```
+
+**2. install Dependencies**
+This downloads all the plugins (like sensors, vibration) used in the project.
+```bash
+flutter pub get
+```
+
+**3. Launch a Simulator**
+- **iOS**: You can open the "Simulator" app via Spotlight Search (Cmd+Space -> Type "Simulator").
+- **Android**: Open Android Studio Device Manager and start an emulator.
+- *Alternatively*, just connect your physical phone via USB.
+
+**4. Run the App**
+In your terminal, run:
+```bash
+flutter run
+```
+*What happens next?*
+- Flutter will detect your open simulator or connected phone.
+- It will compile the code (this takes 1-2 minutes the first time).
+- The app will automatically open on the Simulator/Phone.
+- Your terminal will show logs. **Keep the terminal open** to see debug output.
 
 ## 3. Verification Steps
 
