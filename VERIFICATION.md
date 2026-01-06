@@ -164,7 +164,13 @@ Since the Widget Extension requires a native Xcode Target, you must add it manua
         }
     }
     ```
-7.  Run the app again (`flutter run`). Add the widget to your iOS Home Screen.
+7.  **Fix the Build Cycle (CRITICAL)**:
+    Flutter and Xcode 15+ have a known conflict with Widget Extensions. You must reorder the build phases manually:
+    -   In Xcode, select the **Runner** target -> **Build Phases** tab.
+    -   Find the **Embed Foundation Extensions** phase.
+    -   **Drag it up** so it is located immediately **AFTER** the first `Run Script` phase (the one that runs `flutter assemble`).
+    -   Expand **Embed Foundation Extensions** and **UNCHECK** "Copy only when installing".
+8.  Run the app again (`flutter run`). Add the widget to your iOS Home Screen.
 
 ## 4. Known Limitations (MVP)
 - **iOS Local Notifications**: Requires codesigning and proper Bundle ID setup in Xcode.
