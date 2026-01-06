@@ -7,7 +7,7 @@ This document tracks technical debt, bugs, and UX improvements identified follow
 - [ ] **Angle Intuition (90° Scale)**: Current "straight up" position reports ~55°. Adjust calculation so vertical orientation equals 90° for better user mapping.
 - [ ] **Threshold Offset Bug**: Changing settings (tolerance/target) causes deviations in detection accuracy. Defaults work, but custom ranges feel "off".
 - [ ] **Axis Selector**: 
-    - Add setting to choose which axes are monitored (Pitch vs. Roll).
+    - Add setting to choose which axes are monitored (Pitch and roll vs. Roll vs. Pitch).
     - Allow isolation of "away from user" tilt (Pitch) while ignoring rotation/flatness (Roll) for specific use cases (e.g., sitting vs. watching movies).
 
 ## 2. Background Service & Settings
@@ -24,7 +24,11 @@ This document tracks technical debt, bugs, and UX improvements identified follow
     - Replace pixelated assets with high-resolution versions.
     - Ensure full-bleed icon coverage for both platforms.
 - [ ] **Documentation**:
-    - Embed the background image (`humpback.jpg`) into the `VERIFICATION.md` or `README.md` for visual reference.
+    - Embed the background image (`humpback.jpg`) into the `README.md` for visual effekt under the initial headline.
 
 ## 4. Technical Investigation
 - [ ] Investigate why the pitch/roll calculation drifts or feels inaccurate when the target angle is not 90°.
+
+## 5. Smart eye tracking
+- [ ] use the builtin eye tracking of the phone to detect if the user is looking at the phone or not. and only trigger the alarm if the user is looking at the phone.
+- [ ] add a switch to enable or disable this feature. set it default to enabled.
