@@ -1,4 +1,4 @@
-# AntiBuckel
+# BuckelFips
 
 **Prevent "Buckel" (Poor Posture) by monitoring your phone tilt.**
 

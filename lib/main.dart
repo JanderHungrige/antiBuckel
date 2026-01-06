@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AntiBuckel',
+      title: 'BuckelFips',
       theme: ThemeData(
         primarySwatch: Colors.green,
         brightness: Brightness.dark,

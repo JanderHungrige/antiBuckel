@@ -58,7 +58,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('AntiBuckel Dashboard'),
+        title: const Text('BuckelFips Dashboard'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [

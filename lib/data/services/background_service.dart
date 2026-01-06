@@ -15,7 +15,7 @@ Future<void> initializeService() async {
   // Android Notification
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'antibuckel_service', // id
-    'AntiBuckel Service', // title
+    'BuckelFips Service', // title
     description: 'Monitoring posture in background',
     importance: Importance.low,
   );
@@ -34,7 +34,7 @@ Future<void> initializeService() async {
       autoStart: false,
       isForegroundMode: true,
       notificationChannelId: 'antibuckel_service',
-      initialNotificationTitle: 'AntiBuckel Active',
+      initialNotificationTitle: 'BuckelFips Active',
       initialNotificationContent: 'Monitoring your posture...',
       foregroundServiceNotificationId: 888,
     ),
