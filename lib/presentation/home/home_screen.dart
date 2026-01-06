@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:quick_actions/quick_actions.dart';
+import '../../data/services/widget_service.dart';
 import '../providers.dart';
 import '../settings/settings_screen.dart';
 
@@ -15,12 +17,30 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _isServiceRunning = false;
+  final QuickActions _quickActions = const QuickActions();
+  final WidgetService _widgetService = WidgetService();
 
   @override
   void initState() {
     super.initState();
     _checkServiceStatus();
     _requestPermissions();
+    _setupQuickActions();
+  }
+
+  void _setupQuickActions() {
+    _quickActions.initialize((shortcutType) {
+      if (shortcutType == 'action_start') {
+        _startService();
+      } else if (shortcutType == 'action_stop') {
+        _stopService();
+      }
+    });
+
+    _quickActions.setShortcutItems(<ShortcutItem>[
+      const ShortcutItem(type: 'action_start', localizedTitle: 'Start Monitoring', icon: 'play_arrow'),
+      const ShortcutItem(type: 'action_stop', localizedTitle: 'Stop Monitoring', icon: 'stop'),
+    ]);
   }
 
   Future<void> _checkServiceStatus() async {
@@ -28,25 +48,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     setState(() {
       _isServiceRunning = isRunning;
     });
+    // Sync widget
+    _widgetService.updateWidgetStatus(isRunning);
   }
 
   Future<void> _requestPermissions() async {
     await [
       Permission.notification,
       Permission.ignoreBatteryOptimizations,
-      Permission.accessNotificationPolicy, // For DND/Volume if needed?
+      Permission.accessNotificationPolicy, 
     ].request();
   }
 
   Future<void> _toggleService() async {
-    final service = FlutterBackgroundService();
     if (_isServiceRunning) {
-      service.invoke('stopService');
+      await _stopService();
     } else {
-      await service.startService();
+      await _startService();
     }
-    
-    // Give time for service to start/stop
+  }
+
+  Future<void> _startService() async {
+    await FlutterBackgroundService().startService();
+    await Future.delayed(const Duration(seconds: 1));
+    _checkServiceStatus();
+  }
+
+  Future<void> _stopService() async {
+    FlutterBackgroundService().invoke('stopService');
     await Future.delayed(const Duration(seconds: 1));
     _checkServiceStatus();
   }

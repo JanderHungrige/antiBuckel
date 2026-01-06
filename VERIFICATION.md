@@ -80,6 +80,76 @@ Then run `flutter run` again.
 3.  Toggle **Sound** on.
 4.  Save and test if Sound plays (Note: Sound asset logic is placeholder, verify logs or vibration).
 
+### D. Home Screen Widget & Shortcuts
+#### Android
+1.  Go to Home Screen.
+2.  Long press -> Widgets.
+3.  Find **BuckelFips** and drag it to home screen.
+4.  **Expectation**: Shows status ("Inactive").
+5.  Start monitoring in app -> Widget should update to "Active" (might need tap/refresh if implementation is passive).
+6.  **Shortcuts**: Long press app icon -> See "Start Monitoring". Tap it -> Service starts.
+
+#### iOS (Manual Setup Required)
+Since the Widget Extension requires a native Xcode Target, you must add it manually:
+1.  Open `ios/Runner.xcworkspace` in Xcode.
+2.  **File > New > Target** -> Search "Widget Extension" -> Next.
+3.  Name: `BuckelWidget`. Uncheck "Include Live Activity" (for now). Finish.
+4.  **Important**: Select the main `Runner` target AND the new `BuckelWidget` target. Go to **Signing & Capabilities**.
+5.  Click `+ Capability` -> **App Groups**. Add a new group: `group.com.example.antibuckel`. (Do this for BOTH targets).
+6.  Open `BuckelWidget/BuckelWidget.swift` and paste this code:
+    ```swift
+    import WidgetKit
+    import SwiftUI
+
+    struct Provider: TimelineProvider {
+        func placeholder(in context: Context) -> SimpleEntry {
+            SimpleEntry(date: Date(), isRunning: false)
+        }
+        func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+            completion(SimpleEntry(date: Date(), isRunning: false))
+        }
+        func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+            // Read shared data
+            let userDefaults = UserDefaults(suiteName: "group.com.example.antibuckel")
+            let isRunning = userDefaults?.bool(forKey: "is_running") ?? false
+            let entry = SimpleEntry(date: Date(), isRunning: isRunning)
+            let timeline = Timeline(entries: [entry], policy: .atEnd)
+            completion(timeline)
+        }
+    }
+
+    struct SimpleEntry: TimelineEntry {
+        let date: Date
+        let isRunning: Bool
+    }
+
+    struct BuckelWidgetEntryView : View {
+        var entry: Provider.Entry
+        var body: some View {
+            VStack {
+                Text(entry.isRunning ? "Active" : "Inactive")
+                    .font(.headline)
+                    .foregroundColor(entry.isRunning ? .green : .gray)
+                Text("BuckelFips")
+                    .font(.caption)
+            }
+        }
+    }
+
+    @main
+    struct BuckelWidget: Widget {
+        let kind: String = "BuckelWidget"
+        var body: some WidgetConfiguration {
+            StaticConfiguration(kind: kind, provider: Provider()) { entry in
+                BuckelWidgetEntryView(entry: entry)
+            }
+            .configurationDisplayName("Status")
+            .description("Shows monitoring status.")
+        }
+    }
+    ```
+7.  Run the app again (`flutter run`). Add the widget to your iOS Home Screen.
+
 ## 4. Known Limitations (MVP)
 - **iOS Local Notifications**: Requires codesigning and proper Bundle ID setup in Xcode.
 - **Sound**: Currently placeholder logic in `NotificationService`. Add your audio file to assets and uncomment implementation to enable.
