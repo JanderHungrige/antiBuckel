@@ -85,67 +85,90 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (_isLoading) return const Scaffold(body: Center(child: CircularProgressIndicator()));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          const Text("Calibration", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          ListTile(
-            title: Text("Target Angle: ${_targetAngle.toStringAsFixed(1)}°"),
-            subtitle: const Text("Hold phone in good posture and tap Calibrate"),
-            trailing: ElevatedButton(
-              onPressed: _calibrate,
-              child: const Text("Calibrate"),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: const Text('Settings'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: const AssetImage('assets/images/humpback.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.8), // Slightly darker for settings readout
+              BlendMode.darken,
             ),
           ),
-          const Divider(),
-          
-          const Text("Tolerance", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          Text("Allowable tilt (+/-): ${_tolerance.toInt()}°"),
-          Slider(
-            value: _tolerance,
-            min: 5.0,
-            max: 45.0,
-            divisions: 8,
-            label: "${_tolerance.toInt()}°",
-            onChanged: (val) {
-              setState(() {
-                _tolerance = val;
-              });
-            },
-          ),
-          const Divider(),
+        ),
+        child: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.all(16.0),
+            children: [
+              const Text("Calibration", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text("Target Angle: ${_targetAngle.toStringAsFixed(1)}°"),
+                subtitle: const Text("Hold phone in good posture and tap Calibrate", style: TextStyle(color: Colors.white70)),
+                trailing: ElevatedButton(
+                  onPressed: _calibrate,
+                  child: const Text("Calibrate"),
+                ),
+              ),
+              const Divider(color: Colors.white24),
+              
+              const Text("Tolerance", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              Text("Allowable tilt (+/-): ${_tolerance.toInt()}°"),
+              Slider(
+                value: _tolerance,
+                min: 5.0,
+                max: 45.0,
+                divisions: 8,
+                label: "${_tolerance.toInt()}°",
+                onChanged: (val) {
+                  setState(() {
+                    _tolerance = val;
+                  });
+                },
+              ),
+              const Divider(color: Colors.white24),
 
-          const Text("Alarms", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SwitchListTile(
-            title: const Text("Vibration"),
-            value: _alarms['vibrate'] ?? true,
-            onChanged: (val) => setState(() => _alarms['vibrate'] = val),
+              const Text("Alarms", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text("Vibration"),
+                value: _alarms['vibrate'] ?? true,
+                onChanged: (val) => setState(() => _alarms['vibrate'] = val),
+              ),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text("Sound"),
+                value: _alarms['sound'] ?? false,
+                onChanged: (val) => setState(() => _alarms['sound'] = val),
+              ),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text("Screen Dimming"),
+                value: _alarms['brightness'] ?? true,
+                onChanged: (val) => setState(() => _alarms['brightness'] = val),
+              ),
+              
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _saveSettings,
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 50),
+                  backgroundColor: Colors.blueAccent,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text("Save Settings"),
+              ),
+            ],
           ),
-          SwitchListTile(
-            title: const Text("Sound"),
-            value: _alarms['sound'] ?? false,
-            onChanged: (val) => setState(() => _alarms['sound'] = val),
-          ),
-          SwitchListTile(
-            title: const Text("Screen Dimming"),
-            value: _alarms['brightness'] ?? true,
-            onChanged: (val) => setState(() => _alarms['brightness'] = val),
-          ),
-          
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _saveSettings,
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 50),
-              backgroundColor: Colors.blueAccent,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text("Save Settings"),
-          ),
-        ],
+        ),
       ),
     );
   }
